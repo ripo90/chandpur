@@ -1,0 +1,1600 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="চাঁদপুর ফিশ">
+<meta name="theme-color" content="#0a1628">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>চাঁদপুর ফিশ</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#0a1628; --surface:#112240; --surface2:#1a3a5c;
+  --accent:#00d4aa; --accent2:#f0a500; --danger:#ff4757;
+  --text:#e8f4f8; --muted:#7a9db5; --border:#1e3d5a;
+  --green:#00d4aa; --red:#ff4757; --yellow:#f0a500; --blue:#4fc3f7;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Hind Siliguri',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:0 0 80px;}
+
+/* Header */
+.header{background:linear-gradient(135deg,#0a1628,#112240);border-bottom:1px solid var(--border);padding:14px 16px;position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;}
+.header h1{font-size:17px;font-weight:700;color:var(--accent);}
+.header .date{font-size:11px;color:var(--muted);}
+.cash-badge{background:var(--surface2);border:1px solid var(--accent);border-radius:20px;padding:5px 12px;font-size:13px;font-weight:600;color:var(--accent);}
+
+/* Tabs */
+.tabs{display:flex;background:var(--surface);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{flex-shrink:0;padding:11px 12px;text-align:center;font-size:12px;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;white-space:nowrap;}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:600;}
+
+/* Pages */
+.page{display:none;padding:14px;}
+.page.active{display:block;}
+
+/* Cards */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px;}
+.card-title{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.card-title span{font-size:15px;}
+
+/* Inputs */
+.field{margin-bottom:10px;}
+.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px;}
+.inp{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 11px;color:var(--text);font-family:'Hind Siliguri',sans-serif;font-size:14px;transition:border-color 0.2s;}
+.inp:focus{outline:none;border-color:var(--accent);}
+.inp::placeholder{color:var(--muted);font-size:12px;}
+select.inp{cursor:pointer;}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:9px 16px;border-radius:8px;border:none;font-family:'Hind Siliguri',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;}
+.btn-primary{background:var(--accent);color:#0a1628;width:100%;padding:12px;}
+.btn-primary:active{transform:scale(0.98);}
+.btn-danger{background:var(--danger);color:#fff;font-size:11px;padding:5px 9px;}
+.btn-outline{background:transparent;color:var(--accent);border:1px solid var(--accent);font-size:12px;}
+.btn-sm{padding:5px 10px;font-size:11px;}
+.btn-yellow{background:var(--yellow);color:#0a1628;font-size:12px;padding:6px 12px;}
+
+/* Grid */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+
+/* Summary boxes */
+.sum-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+.sum-box{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:11px;text-align:center;}
+.sum-box .lbl{font-size:10px;color:var(--muted);margin-bottom:3px;}
+.sum-box .val{font-size:17px;font-weight:700;}
+.sum-box.green .val{color:var(--green);}
+.sum-box.red .val{color:var(--red);}
+.sum-box.yellow .val{color:var(--yellow);}
+.sum-box.blue .val{color:var(--blue);}
+
+/* List items */
+.li{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:11px;margin-bottom:7px;display:flex;justify-content:space-between;align-items:center;}
+.li .ll{flex:1;}
+.li .ln{font-size:14px;font-weight:600;}
+.li .ls{font-size:11px;color:var(--muted);margin-top:2px;}
+.li .la{font-size:15px;font-weight:700;}
+.li .la.red{color:var(--red);}
+.li .la.green{color:var(--green);}
+.li .la.yellow{color:var(--yellow);}
+
+/* CF rows */
+.cfr{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);font-size:13px;}
+.cfr:last-child{border-bottom:none;}
+.cfr .cfl{color:var(--muted);}
+.cfr .cfv{font-weight:600;}
+.cfr .cfv.green{color:var(--green);}
+.cfr .cfv.red{color:var(--red);}
+.cfr.total{font-size:14px;padding-top:10px;}
+.cfr.total .cfl{color:var(--text);font-weight:600;}
+
+/* Check badge */
+.check-badge{border-radius:10px;padding:11px 14px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+.check-badge.ok{background:#0d2e1e;border:1px solid var(--green);color:var(--green);}
+.check-badge.fail{background:#2e0d0d;border:1px solid var(--red);color:var(--red);}
+
+/* Tags */
+.tag{display:inline-block;padding:2px 7px;border-radius:20px;font-size:10px;font-weight:600;}
+.tag.in{background:#0d2e1e;color:var(--green);}
+.tag.out{background:#2e0d0d;color:var(--red);}
+.tag.yellow{background:#2e1f00;color:var(--yellow);}
+.tag.blue{background:#0a1f2e;color:var(--blue);}
+
+/* History */
+.hist-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:13px;margin-bottom:10px;}
+.hist-item .hd{font-size:11px;color:var(--muted);margin-bottom:8px;}
+.hist-item .hg{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+.hist-item .hb{text-align:center;}
+.hist-item .hbl{font-size:10px;color:var(--muted);}
+.hist-item .hbv{font-size:13px;font-weight:600;}
+
+/* Party row */
+.party-row{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:11px;margin-bottom:8px;position:relative;}
+.party-row .pname{font-size:12px;font-weight:600;color:var(--accent2);margin-bottom:8px;}
+.party-row .rm-btn{position:absolute;top:9px;right:9px;}
+
+/* Paiker detail */
+.pk-detail{background:var(--bg);border-radius:8px;padding:12px;margin-bottom:10px;}
+.section-hd{font-size:11px;color:var(--muted);font-weight:700;padding:8px 0 5px;letter-spacing:0.5px;text-transform:uppercase;}
+
+/* Category chip */
+.cat-chip{display:inline-flex;align-items:center;gap:4px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:4px 10px;font-size:11px;cursor:pointer;margin:3px;}
+.cat-chip.selected{border-color:var(--accent);color:var(--accent);background:#0d2e1e;}
+
+.divider{border:none;border-top:1px solid var(--border);margin:10px 0;}
+.empty{text-align:center;padding:30px 16px;color:var(--muted);font-size:13px;}
+.empty .em{font-size:36px;margin-bottom:10px;}
+</style>
+
+<script>
+var deferredPrompt = null;
+window.addEventListener("beforeinstallprompt", function(e) {
+  e.preventDefault();
+  deferredPrompt = e;
+  var btn = document.getElementById("installBtn");
+  if(btn) btn.style.display = "block";
+});
+window.addEventListener("appinstalled", function() {
+  var btn = document.getElementById("installBtn");
+  if(btn) btn.style.display = "none";
+});
+function installApp() {
+  if(deferredPrompt) {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(function() { deferredPrompt = null; });
+  } else {
+    alert("Chrome মেনু ( ⋮ ) থেকে Add to Home Screen চাপুন");
+  }
+}
+</script>
+</head>
+<body>
+<div id="installBtn" style="display:none;position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:9999;background:#00d4aa;color:#0a1628;padding:13px 22px;border-radius:25px;font-family:sans-serif;font-size:14px;font-weight:700;box-shadow:0 4px 20px rgba(0,212,170,0.5);cursor:pointer;white-space:nowrap;" onclick="installApp()">📱 App হিসেবে যোগ করুন</div>
+
+
+<div class="header">
+  <div>
+    <h1>🐟 চাঁদপুর ফিশ</h1>
+    <div class="date" id="todayDate"></div>
+  </div>
+  <div class="cash-badge">💵 <span id="headerCash">০</span> ৳</div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="showTab('dashboard')">📊 ড্যাশবোর্ড</div>
+  <div class="tab" onclick="showTab('entry')">➕ চালান</div>
+  <div class="tab" onclick="showTab('daily')">💰 আয়/ব্যয়</div>
+  <div class="tab" onclick="showTab('paiker')">🧾 পাইকার</div>
+  <div class="tab" onclick="showTab('hawalat')">🤝 হাওলাত</div>
+  <div class="tab" onclick="showTab('ledger')">📒 লেজার</div>
+  <div class="tab" onclick="showTab('report')">📈 রিপোর্ট</div>
+  <div class="tab" onclick="showTab('history')">📋 ইতিহাস</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ DASHBOARD -->
+<div id="page-dashboard" class="page active">
+  <div id="dashContent">
+    <div class="empty"><div class="em">📊</div>এখনো কোনো ডেটা নেই<br><small>চালান ট্যাব থেকে শুরু করুন</small></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ ENTRY (চালান) -->
+<div id="page-entry" class="page">
+  <div class="card" id="cashSetupCard">
+    <div class="card-title"><span>💵</span> আজকের শুরুর ক্যাশ</div>
+    <div class="field">
+      <label>হাতে কত টাকা আছে এখন?</label>
+      <input class="inp" type="number" id="startCash" placeholder="যেমন: ২০০০০০" />
+    </div>
+    <button class="btn btn-primary" onclick="setCash()">ক্যাশ সেট করুন</button>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span>🏪</span> পার্টির চালান</div>
+    <div id="partyList"></div>
+    <button class="btn btn-outline" style="width:100%;margin-bottom:10px" onclick="addParty()">+ নতুন পার্টি যোগ করুন</button>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span>🛒</span> বিক্রির হিসাব</div>
+    <div class="two-col">
+      <div class="field">
+        <label>কমিশন %</label>
+        <input class="inp" type="number" id="commissionRate" placeholder="2" value="2" oninput="calcSales()" />
+      </div>
+      <div class="field">
+        <label>মোট কেজি বিক্রি</label>
+        <input class="inp" type="number" id="totalKg" placeholder="কেজি" oninput="calcSales()" />
+      </div>
+      <div class="field">
+        <label>প্রতি কেজি কমিশন ৳</label>
+        <input class="inp" type="number" id="kgRate" placeholder="১০" value="10" oninput="calcSales()" />
+      </div>
+    </div>
+    <div class="two-col">
+      <div class="field">
+        <label>নগদ উঠলো ৳</label>
+        <input class="inp" type="number" id="cashIn" placeholder="০" oninput="calcSales()" />
+      </div>
+      <div class="field">
+        <label>বাকি বিক্রি ৳</label>
+        <input class="inp" type="number" id="bakiSale" placeholder="০" oninput="calcSales()" />
+      </div>
+    </div>
+    <div class="field">
+      <label>খরচ ৳</label>
+      <input class="inp" type="number" id="expense" placeholder="০" oninput="calcSales()" />
+    </div>
+  </div>
+
+  <div id="liveCheck" style="display:none">
+    <div id="checkBadge" class="check-badge ok">✅ হিসাব মিলেছে</div>
+    <div class="card">
+      <div class="card-title"><span>🔍</span> চেক</div>
+      <div class="cfr"><span class="cfl">নগদ + বাকি</span><span class="cfv" id="chk_left">০</span></div>
+      <div class="cfr"><span class="cfl">চালান + কমিশন</span><span class="cfv" id="chk_right">০</span></div>
+      <div class="cfr"><span class="cfl">পার্থক্য</span><span class="cfv" id="chk_diff">০</span></div>
+    </div>
+  </div>
+
+  <button class="btn btn-primary" onclick="saveEntry()">✅ আজকের হিসাব সেভ করুন</button>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ DAILY আয়/ব্যয় -->
+<div id="page-daily" class="page">
+
+  <!-- আয় এন্ট্রি -->
+  <div class="card">
+    <div class="card-title"><span>📈</span> আয় এন্ট্রি</div>
+    <div class="field">
+      <label>বিবরণ</label>
+      <input class="inp" type="text" id="incName" placeholder="যেমন: ওজন কমিশন, পার্টি কমিশন" />
+    </div>
+    <div class="two-col">
+      <div class="field">
+        <label>পরিমাণ ৳</label>
+        <input class="inp" type="number" id="incAmount" placeholder="০" />
+      </div>
+      <div class="field">
+        <label>খাত</label>
+        <select class="inp" id="incCat"></select>
+      </div>
+    </div>
+    <button class="btn btn-primary" style="margin-bottom:8px" onclick="addDailyIncome()">+ আয় যোগ করুন</button>
+    <button class="btn btn-outline" style="width:100%;font-size:12px" onclick="showCatManager('income')">⚙️ আয়ের খাত পরিচালনা</button>
+  </div>
+
+  <!-- ব্যয় এন্ট্রি -->
+  <div class="card">
+    <div class="card-title"><span>📉</span> ব্যয় এন্ট্রি</div>
+    <div class="field">
+      <label>বিবরণ</label>
+      <input class="inp" type="text" id="expName" placeholder="যেমন: স্টাফ মজুরি, আড়ৎ ভাড়া" />
+    </div>
+    <div class="two-col">
+      <div class="field">
+        <label>পরিমাণ ৳</label>
+        <input class="inp" type="number" id="expAmount" placeholder="০" />
+      </div>
+      <div class="field">
+        <label>খাত</label>
+        <select class="inp" id="expCat"></select>
+      </div>
+    </div>
+    <button class="btn btn-primary" style="margin-bottom:8px" onclick="addDailyExpense()">+ ব্যয় যোগ করুন</button>
+    <button class="btn btn-outline" style="width:100%;font-size:12px" onclick="showCatManager('expense')">⚙️ ব্যয়ের খাত পরিচালনা</button>
+  </div>
+
+  <!-- খাত পরিচালনা modal -->
+  <div id="catManagerPanel" style="display:none">
+    <div class="card" style="border-color:var(--accent2)">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <div class="card-title" style="margin:0"><span>⚙️</span> <span id="catManagerTitle">খাত পরিচালনা</span></div>
+        <button class="btn btn-outline btn-sm" onclick="hideCatManager()">✕ বন্ধ</button>
+      </div>
+      <div class="field">
+        <label>নতুন খাতের নাম</label>
+        <div style="display:flex;gap:8px">
+          <input class="inp" type="text" id="newCatName" placeholder="যেমন: ভূর্তকি, ট্রান্সপোর্ট" style="flex:1" />
+          <button class="btn btn-primary" style="width:auto;padding:9px 14px" onclick="addNewCat()">যোগ</button>
+        </div>
+      </div>
+      <div id="catList"></div>
+    </div>
+  </div>
+
+  <!-- আজকের সারসংক্ষেপ -->
+  <div class="card" style="border-color:var(--accent2)">
+    <div class="card-title"><span>📊</span> আজকের হিসাব (<span id="dailyDateLabel"></span>)</div>
+    <div class="cfr"><span class="cfl">📈 মোট আয়</span><span class="cfv green" id="ds_inc">০ ৳</span></div>
+    <div class="cfr"><span class="cfl">📉 মোট ব্যয়</span><span class="cfv red" id="ds_exp">০ ৳</span></div>
+    <hr class="divider">
+    <div class="cfr total"><span class="cfl">নিট লাভ / লোকসান</span><span class="cfv" id="ds_net" style="font-size:17px;font-weight:700">০ ৳</span></div>
+  </div>
+
+  <!-- আজকের লেনদেন -->
+  <div class="card">
+    <div class="card-title"><span>📜</span> আজকের লেনদেন</div>
+    <div id="dailyTxList"><div class="empty"><div class="em">💰</div>কোনো লেনদেন নেই</div></div>
+  </div>
+
+  <!-- খাতভিত্তিক সারসংক্ষেপ -->
+  <div class="card">
+    <div class="card-title"><span>📂</span> খাতভিত্তিক বিশ্লেষণ (আজ)</div>
+    <div id="catBreakdown"><div style="color:var(--muted);font-size:12px;text-align:center;padding:12px">ডেটা নেই</div></div>
+  </div>
+
+  <!-- আগের দিনের ইতিহাস -->
+  <div class="card">
+    <div class="card-title"><span>📅</span> আগের দিনের হিসাব</div>
+    <div id="dailyHistory"><div class="empty"><div class="em">📅</div>কোনো ইতিহাস নেই</div></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ PAIKER পাইকার -->
+<div id="page-paiker" class="page">
+
+  <!-- পাইকার যোগ / তালিকা toggle -->
+  <div id="paikerListView">
+    <div class="card">
+      <div class="card-title"><span>🧾</span> পাইকার তালিকা</div>
+      <div class="sum-grid" id="paikerSummary">
+        <div class="sum-box red"><div class="lbl">মোট বাকি</div><div class="val" id="pkTotalDue">০ ৳</div></div>
+        <div class="sum-box green"><div class="lbl">আজকের কালেকশন</div><div class="val" id="pkTodayCollection">০ ৳</div></div>
+      </div>
+      <button class="btn btn-outline" style="width:100%;margin-bottom:12px" onclick="showAddPaiker()">+ নতুন পাইকার যোগ করুন</button>
+      <div class="field">
+        <input class="inp" type="text" id="paikerSearch" placeholder="🔍 পাইকার খুঁজুন..." oninput="renderPaikerList()" />
+      </div>
+      <div id="paikerList"><div class="empty"><div class="em">🧾</div>কোনো পাইকার নেই</div></div>
+    </div>
+  </div>
+
+  <!-- নতুন পাইকার ফর্ম -->
+  <div id="addPaikerView" style="display:none">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <div class="card-title" style="margin:0"><span>➕</span> নতুন পাইকার</div>
+        <button class="btn btn-outline btn-sm" onclick="hideAddPaiker()">✕ বাতিল</button>
+      </div>
+      <div class="field"><label>পাইকারের নাম</label><input class="inp" type="text" id="pkName" placeholder="নাম লিখুন" /></div>
+      <div class="two-col">
+        <div class="field"><label>ফোন নম্বর</label><input class="inp" type="tel" id="pkPhone" placeholder="০১..." /></div>
+        <div class="field"><label>এলাকা</label><input class="inp" type="text" id="pkArea" placeholder="যেমন: মিরপুর" /></div>
+      </div>
+      <div class="field"><label>শুরুর বাকি ৳ (পুরানো জের)</label><input class="inp" type="number" id="pkOpening" placeholder="০" /></div>
+      <button class="btn btn-primary" onclick="addPaiker()">✅ পাইকার যোগ করুন</button>
+    </div>
+  </div>
+
+  <!-- পাইকার বিস্তারিত -->
+  <div id="paikerDetail" style="display:none">
+    <div class="card" style="border-color:var(--accent2)">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <div>
+          <div style="font-size:16px;font-weight:700;color:var(--accent2)" id="pkdName"></div>
+          <div style="font-size:11px;color:var(--muted)" id="pkdSub"></div>
+        </div>
+        <button class="btn btn-outline btn-sm" onclick="closePaikerDetail()">← তালিকা</button>
+      </div>
+
+      <!-- ব্যালেন্স বক্স -->
+      <div style="background:var(--bg);border-radius:10px;padding:14px;text-align:center;margin-bottom:12px">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:4px">মোট বাকি</div>
+        <div style="font-size:32px;font-weight:700;color:var(--red)" id="pkdBalance">০ ৳</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px" id="pkdBalSub"></div>
+        <div style="margin-top:10px;display:flex;gap:8px;justify-content:center">
+          <button id="pkdCallBtn" class="btn btn-outline btn-sm" style="display:none" onclick="callPaiker()">📞 ফোন করুন</button>
+          <button class="btn btn-outline btn-sm" onclick="sharePaikerStatement()">📤 স্টেটমেন্ট শেয়ার</button>
+        </div>
+      </div>
+      <!-- সারসংক্ষেপ গ্রিড -->
+      <div class="three-col" style="margin-bottom:12px">
+        <div class="sum-box red"><div class="lbl">মোট বাকি নেওয়া</div><div class="val" id="pkdTotalBaki" style="font-size:13px">০ ৳</div></div>
+        <div class="sum-box green"><div class="lbl">মোট জমা</div><div class="val" id="pkdTotalJoma" style="font-size:13px">০ ৳</div></div>
+        <div class="sum-box yellow"><div class="lbl">বকেয়া</div><div class="val" id="pkdNetDue" style="font-size:13px">০ ৳</div></div>
+      </div>
+
+      <!-- নতুন বাকি যোগ -->
+      <div class="pk-detail">
+        <div class="section-hd">📦 নতুন বাকি যোগ করুন</div>
+        <div class="two-col">
+          <div class="field"><label>পরিমাণ ৳</label><input class="inp" type="number" id="pkdBakiAmt" placeholder="০" /></div>
+          <div class="field"><label>তারিখ</label><input class="inp" type="date" id="pkdBakiDate" /></div>
+        </div>
+        <div class="field"><label>নোট (ঐচ্ছিক)</label><input class="inp" type="text" id="pkdBakiNote" placeholder="যেমন: আজকের মাছ" /></div>
+        <button class="btn btn-primary" onclick="addPaikerBaki()">+ বাকি যোগ করুন</button>
+      </div>
+
+      <!-- জমা নেওয়া -->
+      <div class="pk-detail">
+        <div class="section-hd">💵 জমা নেওয়া (মোট বাকি থেকে কাটবে)</div>
+        <div class="two-col">
+          <div class="field"><label>জমার পরিমাণ ৳</label><input class="inp" type="number" id="pkdJomaAmt" placeholder="০" /></div>
+          <div class="field"><label>তারিখ</label><input class="inp" type="date" id="pkdJomaDate" /></div>
+        </div>
+        <div class="field"><label>নোট</label><input class="inp" type="text" id="pkdJomaNote" placeholder="যেমন: নগদ জমা" /></div>
+        <button class="btn btn-primary" style="background:var(--green)" onclick="addPaikerJoma()">✅ জমা নিন</button>
+      </div>
+
+      <!-- লেনদেন ইতিহাস -->
+      <div class="section-hd">📜 লেনদেনের ইতিহাস</div>
+      <div id="pkdTxList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ HAWALAT -->
+<div id="page-hawalat" class="page">
+  <div class="card">
+    <div class="card-title"><span>➕</span> হাওলাত এন্ট্রি</div>
+    <div class="field"><label>কার সাথে</label><input class="inp" type="text" id="hawName" placeholder="নাম লিখুন" /></div>
+    <div class="two-col">
+      <div class="field"><label>পরিমাণ ৳</label><input class="inp" type="number" id="hawAmount" placeholder="০" /></div>
+      <div class="field">
+        <label>ধরন</label>
+        <select class="inp" id="hawType">
+          <option value="দিলাম">দিলাম (আমি দিলাম)</option>
+          <option value="নিলাম">নিলাম (আমি নিলাম)</option>
+          <option value="বিকাশ দিলাম">বিকাশ দিলাম</option>
+          <option value="বিকাশ নিলাম">বিকাশ নিলাম</option>
+        </select>
+      </div>
+    </div>
+    <div class="two-col">
+      <div class="field"><label>তারিখ</label><input class="inp" type="date" id="hawDate" /></div>
+      <div class="field"><label>নোট</label><input class="inp" type="text" id="hawNote" placeholder="ঐচ্ছিক" /></div>
+    </div>
+    <button class="btn btn-primary" onclick="addHawalat()">হাওলাত যোগ করুন</button>
+  </div>
+  <div class="card">
+    <div class="card-title"><span>🤝</span> হাওলাত তালিকা</div>
+    <div id="hawList"><div class="empty"><div class="em">🤝</div>কোনো হাওলাত নেই</div></div>
+  </div>
+  <div class="sum-grid">
+    <div class="sum-box red"><div class="lbl">আমি দিয়েছি</div><div class="val" id="hawGiven">০ ৳</div></div>
+    <div class="sum-box green"><div class="lbl">আমি নিয়েছি</div><div class="val" id="hawTaken">০ ৳</div></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ LEDGER -->
+<div id="page-ledger" class="page">
+  <div class="card">
+    <div class="card-title"><span>👤</span> নতুন ব্যক্তি / পার্টি যোগ করুন</div>
+    <div class="two-col">
+      <div class="field"><label>নাম</label><input class="inp" type="text" id="ledgerName" placeholder="নাম লিখুন" /></div>
+      <div class="field">
+        <label>ধরন</label>
+        <select class="inp" id="ledgerType">
+          <option value="পার্টি">পার্টি (মাছ সরবরাহকারী)</option>
+          <option value="ব্যবসায়ী">ব্যবসায়ী</option>
+          <option value="ধার">ধার</option>
+          <option value="অন্যান্য">অন্যান্য</option>
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <label>শুরুর জের ৳ — <small style="color:var(--red)">তারা পাবে (+)</small> / <small style="color:var(--green)">তুমি পাবে (-)</small></label>
+      <input class="inp" type="number" id="ledgerOpening" placeholder="যেমন: ৯৫০০০ বা -৫০০০" />
+    </div>
+    <button class="btn btn-primary" onclick="addLedgerPerson()">যোগ করুন</button>
+  </div>
+  <div id="ledgerPersonList"></div>
+  <div id="ledgerDetail" style="display:none">
+    <div class="card" style="border-color:var(--accent2)">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <div class="card-title" style="margin:0"><span>📒</span> <span id="ldName"></span></div>
+        <span id="ldTypeBadge" class="tag in"></span>
+      </div>
+      <div style="background:var(--bg);border-radius:8px;padding:12px;margin-bottom:12px">
+        <div class="cfr"><span class="cfl">শুরুর জের</span><span class="cfv" id="ldOpening"></span></div>
+        <div class="cfr"><span class="cfl">মোট লেনদেন</span><span class="cfv" id="ldTotal"></span></div>
+        <hr class="divider">
+        <div class="cfr"><span class="cfl" style="color:var(--text);font-weight:700">বর্তমান জের</span><span class="cfv" id="ldBalance" style="font-size:19px;font-weight:700"></span></div>
+        <div style="font-size:11px;color:var(--muted);text-align:right;margin-top:3px" id="ldBalanceNote"></div>
+      </div>
+      <div style="background:var(--bg);border-radius:8px;padding:12px;margin-bottom:12px">
+        <div style="font-size:12px;color:var(--muted);margin-bottom:10px;font-weight:600">➕ নতুন লেনদেন</div>
+        <div class="two-col">
+          <div class="field"><label>পরিমাণ ৳</label><input class="inp" type="number" id="ldTxAmt" placeholder="০" /></div>
+          <div class="field">
+            <label>ধরন</label>
+            <select class="inp" id="ldTxType">
+              <option value="দিলাম">দিলাম (আমি পরিশোধ)</option>
+              <option value="পেলাম">পেলাম (টাকা পেলাম)</option>
+              <option value="চালান">নতুন চালান (বাকি বাড়লো)</option>
+              <option value="ধার দিলাম">ধার দিলাম</option>
+              <option value="ধার নিলাম">ধার নিলাম</option>
+              <option value="বিকাশ দিলাম">বিকাশ দিলাম</option>
+              <option value="বিকাশ নিলাম">বিকাশ নিলাম</option>
+            </select>
+          </div>
+        </div>
+        <div class="field"><label>নোট</label><input class="inp" type="text" id="ldTxNote" placeholder="যেমন: আজকের চালান পরিশোধ" /></div>
+        <button class="btn btn-primary" onclick="addLedgerTx()">লেনদেন যোগ করুন</button>
+      </div>
+      <div class="card-title"><span>📜</span> লেনদেনের ইতিহাস</div>
+      <div id="ldTxList"></div>
+      <button class="btn btn-outline" style="width:100%;margin-top:10px" onclick="closeLedgerDetail()">← তালিকায় ফিরুন</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════ REPORT -->
+<div id="page-report" class="page">
+
+  <!-- ফিল্টার -->
+  <div class="card">
+    <div class="card-title"><span>🔍</span> তারিখ অনুযায়ী রিপোর্ট</div>
+    <div class="two-col">
+      <div class="field"><label>শুরুর তারিখ</label><input class="inp" type="date" id="rptFrom" oninput="renderReport()" /></div>
+      <div class="field"><label>শেষ তারিখ</label><input class="inp" type="date" id="rptTo" oninput="renderReport()" /></div>
+    </div>
+    <div class="field">
+      <label>দ্রুত সিলেক্ট</label>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn btn-outline btn-sm" onclick="setRange('today')">আজ</button>
+        <button class="btn btn-outline btn-sm" onclick="setRange('week')">এই সপ্তাহ</button>
+        <button class="btn btn-outline btn-sm" onclick="setRange('month')">এই মাস</button>
+        <button class="btn btn-outline btn-sm" onclick="setRange('last3')">৩ মাস</button>
+        <button class="btn btn-outline btn-sm" onclick="setRange('all')">সব</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- রিপোর্ট সারসংক্ষেপ -->
+  <div id="rptSummary"></div>
+
+  <!-- শেয়ার/প্রিন্ট -->
+  <div class="card">
+    <div class="card-title"><span>📤</span> শেয়ার / প্রিন্ট</div>
+    <div class="two-col">
+      <button class="btn btn-primary" onclick="shareReport()">📱 শেয়ার করুন</button>
+      <button class="btn btn-outline" onclick="printReport()">🖨️ প্রিন্ট করুন</button>
+    </div>
+    <button class="btn btn-outline" style="width:100%;margin-top:8px" onclick="saveReportImage()">🖼️ ছবি হিসেবে সেভ করুন</button>
+  </div>
+
+  <!-- বিস্তারিত লেনদেন -->
+  <div class="card">
+    <div class="card-title"><span>📜</span> বিস্তারিত লেনদেন</div>
+    <div id="rptTxList"><div class="empty"><div class="em">📅</div>তারিখ সিলেক্ট করুন</div></div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ HISTORY -->
+<div id="page-history" class="page">
+  <div id="historyList"><div class="empty"><div class="em">📋</div>কোনো ইতিহাস নেই</div></div>
+</div>
+
+<!-- Backup / Restore -->
+<div style="position:fixed;bottom:10px;right:10px;display:flex;gap:8px;z-index:9999">
+  <button class="btn btn-outline btn-sm" onclick="exportBackup()">💾 Backup</button>
+  <button class="btn btn-outline btn-sm" onclick="document.getElementById('restoreFile').click()">📂 Restore</button>
+  <input type="file" id="restoreFile" style="display:none" onchange="restoreBackup(event)">
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════════════════ STATE
+let state = JSON.parse(localStorage.getItem('mach_state') || '{}');
+const DEF = {
+  cash: 0, parties: [], bakiList: [], hawList: [],
+  history: [], ledger: [], partyCount: 0,
+  dailyTx: [],
+  paikers: [],   // {id, name, phone, area, opening, txs:[{id,type:'baki'|'joma',amount,date,note}]}
+  incCats: ['ওজন কমিশন','চালান কমিশন','বাকি কালেকশন','অন্যান্য আয়'],
+  expCats: ['স্টাফ মজুরি','আড়ৎ ভাড়া','পরিবহন','ভূর্তকি','বাজার খরচ','অন্যান্য খরচ'],
+};
+Object.keys(DEF).forEach(k => { if (state[k] === undefined || state[k] === null) state[k] = DEF[k]; });
+// migrate: ensure arrays
+['incCats','expCats'].forEach(k => { if (!Array.isArray(state[k])) state[k] = DEF[k]; });
+
+let activeLedgerId = null;
+let activePaikerId = null;
+let activeCatType = null; // 'income' | 'expense'
+
+function save() { localStorage.setItem('mach_state', JSON.stringify(state)); }
+
+function fmt(n) {
+  n = Math.round(n || 0);
+  try {
+    const r = n.toLocaleString('bn-BD');
+    if (r && r !== 'NaN') return r;
+  } catch(e) {}
+  return n.toString().replace(/\d/g, d => '০১২৩৪৫৬৭৮৯'[d]);
+}
+function today() { return new Date().toLocaleDateString('bn-BD',{day:'numeric',month:'long',year:'numeric'}); }
+function todayISO() { return new Date().toISOString().split('T')[0]; }
+function dateBN(iso) {
+  try { return new Date(iso).toLocaleDateString('bn-BD',{day:'numeric',month:'long',year:'numeric'}); }
+  catch(e) { return iso; }
+}
+
+// ══════════════════════════════════════════════════════════════════════ INIT
+document.getElementById('todayDate').textContent = today();
+document.getElementById('hawDate').value = todayISO();
+// Set default report range to this month
+const _t = todayISO();
+setTimeout(()=>{
+  const rf=document.getElementById('rptFrom');
+  const rt=document.getElementById('rptTo');
+  if(rf&&rt){rf.value=_t.slice(0,7)+'-01';rt.value=_t;}
+},100);
+document.getElementById('dailyDateLabel').textContent = today();
+if (document.getElementById('pkdBakiDate')) document.getElementById('pkdBakiDate').value = todayISO();
+if (document.getElementById('pkdJomaDate')) document.getElementById('pkdJomaDate').value = todayISO();
+updateHeader();
+renderDashboard();
+renderHawalat();
+renderHistory();
+renderLedgerList();
+renderDailyPage();
+renderPaikerList();
+populateCatSelects();
+if (state.cash > 0) document.getElementById('startCash').value = state.cash;
+
+// ══════════════════════════════════════════════════════════════════════ TABS
+function showTab(name) {
+  const tabs = ['dashboard','entry','daily','paiker','hawalat','ledger','report','history'];
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', tabs[i] === name));
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  if (name === 'daily') renderDailyPage();
+  if (name === 'paiker') renderPaikerList();
+  if (name === 'report') renderReport();
+}
+
+function updateHeader() { document.getElementById('headerCash').textContent = fmt(state.cash); }
+
+// ══════════════════════════════════════════════════════════════════════ CASH
+function setCash() {
+  const v = parseFloat(document.getElementById('startCash').value) || 0;
+  state.cash = v; save(); updateHeader(); renderDashboard();
+  const c = document.getElementById('cashSetupCard');
+  c.style.borderColor = 'var(--accent)';
+  setTimeout(() => c.style.borderColor = 'var(--border)', 1000);
+}
+
+// ══════════════════════════════════════════════════════════════════════ PARTIES (চালান)
+let tempParties = [];
+function addParty() {
+  state.partyCount++;
+  tempParties.push({ id: state.partyCount, name:'', chalan:0, kg:0, paidToParty:0 });
+  renderParties();
+}
+function removeParty(id) { tempParties = tempParties.filter(p => p.id !== id); renderParties(); calcSales(); }
+function renderParties() {
+  const el = document.getElementById('partyList');
+  if (!tempParties.length) { el.innerHTML='<div style="text-align:center;color:var(--muted);font-size:12px;padding:10px">কোনো পার্টি যোগ হয়নি</div>'; return; }
+  el.innerHTML = tempParties.map(p => `
+    <div class="party-row" id="party-${p.id}">
+      <div class="pname">পার্টি ${p.id}</div>
+      <button class="btn btn-danger btn-sm rm-btn" onclick="removeParty(${p.id})">✕</button>
+      <div class="field"><label>পার্টির নাম</label><input class="inp" type="text" placeholder="নাম" value="${p.name}" oninput="updateParty(${p.id},'name',this.value)" /></div>
+      <div class="two-col">
+        <div class="field"><label>চালান ৳</label><input class="inp" type="number" placeholder="০" value="${p.chalan||''}" oninput="updateParty(${p.id},'chalan',this.value);calcSales()" /></div>
+        <div class="field"><label>পার্টিকে দিলাম ৳</label><input class="inp" type="number" placeholder="০" value="${p.paidToParty||''}" oninput="updateParty(${p.id},'paidToParty',this.value);calcSales()" /></div>
+      </div>
+    </div>`).join('');
+}
+function updateParty(id, field, val) {
+  const p = tempParties.find(x => x.id === id);
+  if (p) p[field] = isNaN(parseFloat(val)) ? val : parseFloat(val);
+  calcSales();
+}
+function calcSales() {
+  const kg = parseFloat(document.getElementById('totalKg').value) || 0;
+  const rate = parseFloat(document.getElementById('kgRate').value) || 10;
+  const cashIn = parseFloat(document.getElementById('cashIn').value) || 0;
+  const bakiSale = parseFloat(document.getElementById('bakiSale').value) || 0;
+  const totalChalan = tempParties.reduce((s,p) => s+(p.chalan||0), 0);
+  const commRate = (parseFloat(document.getElementById('commissionRate')?.value)||2)/100;
+  const totalComm = totalChalan*commRate + kg*rate;
+  const left = cashIn+bakiSale, right = totalChalan+totalComm, diff = left-right;
+  if (left>0||right>0) {
+    document.getElementById('liveCheck').style.display='block';
+    document.getElementById('chk_left').textContent = fmt(left)+' ৳';
+    document.getElementById('chk_right').textContent = fmt(right)+' ৳';
+    document.getElementById('chk_diff').textContent = (diff>=0?'+':'')+fmt(diff)+' ৳';
+    const b = document.getElementById('checkBadge');
+    if (Math.abs(diff)<5) { b.className='check-badge ok'; b.textContent='✅ হিসাব মিলেছে'; }
+    else { b.className='check-badge fail'; b.textContent=`❌ গরমিল: ${fmt(Math.abs(diff))} ৳`; }
+  }
+}
+function saveEntry() {
+  const kg = parseFloat(document.getElementById('totalKg').value)||0;
+  const rate = parseFloat(document.getElementById('kgRate').value)||10;
+  const cashIn = parseFloat(document.getElementById('cashIn').value)||0;
+  const bakiSale = parseFloat(document.getElementById('bakiSale').value)||0;
+  const expense = parseFloat(document.getElementById('expense').value)||0;
+  const totalChalan = tempParties.reduce((s,p) => s+(p.chalan||0),0);
+  const totalPaidToParty = tempParties.reduce((s,p) => s+(p.paidToParty||0),0);
+  const commRate = (parseFloat(document.getElementById('commissionRate')?.value)||2)/100;
+  const totalComm = totalChalan*commRate + kg*rate;
+  const netProfit = totalComm - expense;
+  const prevCash = state.cash;
+  state.cash = prevCash - totalPaidToParty + cashIn + totalComm - expense;
+  state.history.unshift({
+    date: todayISO(), dateDisplay: today(),
+    parties: JSON.parse(JSON.stringify(tempParties)),
+    totalChalan, totalPaidToParty, kg, cashIn, bakiSale, expense,
+    totalComm, netProfit, cashBefore: prevCash, cashAfter: state.cash
+  });
+  save(); updateHeader(); renderDashboard(); renderHistory();
+  tempParties = []; renderParties();
+  ['totalKg','cashIn','bakiSale','expense'].forEach(id => document.getElementById(id).value='');
+  document.getElementById('liveCheck').style.display='none';
+  showTab('dashboard');
+  alert('✅ হিসাব সেভ হয়েছে!');
+}
+
+// ══════════════════════════════════════════════════════════════════════ DASHBOARD
+function renderDashboard() {
+  const el = document.getElementById('dashContent');
+  const h = state.history;
+  if (!h.length) { el.innerHTML='<div class="empty"><div class="em">📊</div>এখনো কোনো ডেটা নেই<br><small>চালান ট্যাব থেকে শুরু করুন</small></div>'; return; }
+  const last = h[0];
+  const todayStr = todayISO();
+  const totalPaikerDue = (state.paikers||[]).reduce((s,pk) => s + paikerBalance(pk), 0);
+  const totalHawGiven = state.hawList.filter(x=>x.type==='দিলাম').reduce((s,x)=>s+x.amount,0);
+  const totalHawTaken = state.hawList.filter(x=>x.type==='নিলাম').reduce((s,x)=>s+x.amount,0);
+  const monthProfit = h.filter(e=>e.date.startsWith(todayStr.slice(0,7))).reduce((s,e)=>s+e.netProfit,0);
+  const todayInc = (state.dailyTx||[]).filter(x=>x.date===todayStr&&x.kind==='income').reduce((s,x)=>s+x.amount,0);
+  const todayExp = (state.dailyTx||[]).filter(x=>x.date===todayStr&&x.kind==='expense').reduce((s,x)=>s+x.amount,0);
+  const todayNet = todayInc - todayExp;
+  el.innerHTML = `
+    <div class="card" style="border-color:var(--accent)">
+      <div class="card-title"><span>💵</span> বর্তমান ক্যাশ</div>
+      <div style="text-align:center;font-size:34px;font-weight:700;color:var(--accent);padding:8px 0">${fmt(state.cash)} ৳</div>
+    </div>
+    <div class="sum-grid">
+      <div class="sum-box green"><div class="lbl">এই মাসের লাভ</div><div class="val">${fmt(monthProfit)} ৳</div></div>
+      <div class="sum-box red"><div class="lbl">পাইকার মোট বাকি</div><div class="val">${fmt(totalPaikerDue)} ৳</div></div>
+      <div class="sum-box yellow"><div class="lbl">হাওলাত দিয়েছি</div><div class="val">${fmt(totalHawGiven)} ৳</div></div>
+      <div class="sum-box blue"><div class="lbl">হাওলাত নিয়েছি</div><div class="val">${fmt(totalHawTaken)} ৳</div></div>
+    </div>
+    <div class="card" style="border-color:var(--accent2)">
+      <div class="card-title"><span>💰</span> আজকের আয়/ব্যয়</div>
+      <div class="cfr"><span class="cfl">📈 মোট আয়</span><span class="cfv green">+${fmt(todayInc)} ৳</span></div>
+      <div class="cfr"><span class="cfl">📉 মোট ব্যয়</span><span class="cfv red">-${fmt(todayExp)} ৳</span></div>
+      <hr class="divider">
+      <div class="cfr total"><span class="cfl">নিট</span><span class="cfv ${todayNet>=0?'green':'red'}" style="font-size:16px">${todayNet>=0?'+':''}${fmt(todayNet)} ৳</span></div>
+      <button class="btn btn-outline" style="width:100%;margin-top:10px;font-size:12px" onclick="showTab('daily')">বিস্তারিত →</button>
+    </div>
+    <div class="card">
+      <div class="card-title"><span>📅</span> সর্বশেষ চালান — ${last.dateDisplay}</div>
+      <div class="cfr"><span class="cfl">মোট চালান</span><span class="cfv">${fmt(last.totalChalan)} ৳</span></div>
+      <div class="cfr"><span class="cfl">পার্টিকে দিলাম</span><span class="cfv red">-${fmt(last.totalPaidToParty)} ৳</span></div>
+      <div class="cfr"><span class="cfl">নগদ উঠলো</span><span class="cfv green">+${fmt(last.cashIn)} ৳</span></div>
+      <div class="cfr"><span class="cfl">কমিশন আয়</span><span class="cfv green">+${fmt(last.totalComm)} ৳</span></div>
+      <div class="cfr"><span class="cfl">খরচ</span><span class="cfv red">-${fmt(last.expense)} ৳</span></div>
+      <hr class="divider">
+      <div class="cfr total"><span class="cfl">নিট লাভ</span><span class="cfv ${last.netProfit>=0?'green':'red'}">${fmt(last.netProfit)} ৳</span></div>
+      <div class="cfr total"><span class="cfl">ক্যাশ পরিবর্তন</span><span class="cfv ${last.cashAfter>=last.cashBefore?'green':'red'}">${fmt(last.cashBefore)} → ${fmt(last.cashAfter)} ৳</span></div>
+    </div>`;
+}
+
+// ══════════════════════════════════════════════════════════════════════ DAILY আয়/ব্যয়
+function populateCatSelects() {
+  const iSel = document.getElementById('incCat');
+  const eSel = document.getElementById('expCat');
+  if (iSel) { iSel.innerHTML = state.incCats.map(c=>`<option>${c}</option>`).join(''); }
+  if (eSel) { eSel.innerHTML = state.expCats.map(c=>`<option>${c}</option>`).join(''); }
+}
+
+function addDailyIncome() {
+  const name = document.getElementById('incName').value.trim();
+  const amount = parseFloat(document.getElementById('incAmount').value)||0;
+  const cat = document.getElementById('incCat').value;
+  if (!name||!amount) { alert('বিবরণ ও পরিমাণ দিন'); return; }
+  state.dailyTx.push({id:Date.now(),date:todayISO(),kind:'income',cat,name,amount});
+  state.cash += amount;
+  save();
+  document.getElementById('incName').value='';
+  document.getElementById('incAmount').value='';
+  renderDailyPage(); updateHeader(); renderDashboard();
+}
+
+function addDailyExpense() {
+  const name = document.getElementById('expName').value.trim();
+  const amount = parseFloat(document.getElementById('expAmount').value)||0;
+  const cat = document.getElementById('expCat').value;
+  if (!name||!amount) { alert('বিবরণ ও পরিমাণ দিন'); return; }
+  state.dailyTx.push({id:Date.now(),date:todayISO(),kind:'expense',cat,name,amount});
+  state.cash -= amount;
+  save();
+  document.getElementById('expName').value='';
+  document.getElementById('expAmount').value='';
+  renderDailyPage(); updateHeader(); renderDashboard();
+}
+
+function deleteDailyTx(id) {
+  const tx = state.dailyTx.find(x=>x.id===id);
+  if (!tx||!confirm('এই এন্ট্রি মুছবেন?')) return;
+  if (tx.kind==='income') state.cash -= tx.amount;
+  else state.cash += tx.amount;
+  state.dailyTx = state.dailyTx.filter(x=>x.id!==id);
+  save(); renderDailyPage(); updateHeader(); renderDashboard();
+}
+
+function renderDailyPage() {
+  const todayStr = todayISO();
+  const todayTx = state.dailyTx.filter(x=>x.date===todayStr);
+  const pastDates = [...new Set(state.dailyTx.filter(x=>x.date!==todayStr).map(x=>x.date))].sort().reverse();
+
+  const totalInc = todayTx.filter(x=>x.kind==='income').reduce((s,x)=>s+x.amount,0);
+  const totalExp = todayTx.filter(x=>x.kind==='expense').reduce((s,x)=>s+x.amount,0);
+  const net = totalInc-totalExp;
+
+  document.getElementById('ds_inc').textContent = fmt(totalInc)+' ৳';
+  document.getElementById('ds_exp').textContent = fmt(totalExp)+' ৳';
+  const nEl = document.getElementById('ds_net');
+  nEl.textContent = (net>=0?'+':'')+fmt(net)+' ৳';
+  nEl.style.color = net>=0?'var(--green)':'var(--red)';
+
+  // আজকের লেনদেন তালিকা
+  const txEl = document.getElementById('dailyTxList');
+  if (!todayTx.length) { txEl.innerHTML='<div class="empty"><div class="em">💰</div>আজকে কোনো লেনদেন নেই</div>'; }
+  else {
+    const incs = todayTx.filter(x=>x.kind==='income');
+    const exps = todayTx.filter(x=>x.kind==='expense');
+    let html='';
+    if (incs.length) {
+      html+=`<div class="section-hd" style="color:var(--green)">📈 আয়</div>`;
+      html+=incs.map(tx=>`
+        <div class="li">
+          <div class="ll">
+            <div class="ln">${tx.name}</div>
+            <div class="ls"><span class="tag in">${tx.cat}</span></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="la green">+${fmt(tx.amount)} ৳</div>
+            <button class="btn btn-danger btn-sm" onclick="deleteDailyTx(${tx.id})">✕</button>
+          </div>
+        </div>`).join('');
+    }
+    if (exps.length) {
+      html+=`<div class="section-hd" style="color:var(--red);margin-top:8px">📉 ব্যয়</div>`;
+      html+=exps.map(tx=>`
+        <div class="li">
+          <div class="ll">
+            <div class="ln">${tx.name}</div>
+            <div class="ls"><span class="tag out">${tx.cat}</span></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="la red">-${fmt(tx.amount)} ৳</div>
+            <button class="btn btn-danger btn-sm" onclick="deleteDailyTx(${tx.id})">✕</button>
+          </div>
+        </div>`).join('');
+    }
+    txEl.innerHTML = html;
+  }
+
+  // খাতভিত্তিক বিশ্লেষণ
+  const cbEl = document.getElementById('catBreakdown');
+  if (!todayTx.length) { cbEl.innerHTML='<div style="color:var(--muted);font-size:12px;text-align:center;padding:12px">ডেটা নেই</div>'; }
+  else {
+    const catMap = {};
+    todayTx.forEach(tx => {
+      if (!catMap[tx.cat]) catMap[tx.cat]={inc:0,exp:0};
+      if (tx.kind==='income') catMap[tx.cat].inc+=tx.amount;
+      else catMap[tx.cat].exp+=tx.amount;
+    });
+    cbEl.innerHTML = Object.entries(catMap).map(([cat,v])=>`
+      <div class="cfr">
+        <span class="cfl">${cat}</span>
+        <span style="display:flex;gap:8px;font-size:12px">
+          ${v.inc?`<span style="color:var(--green)">+${fmt(v.inc)}</span>`:''}
+          ${v.exp?`<span style="color:var(--red)">-${fmt(v.exp)}</span>`:''}
+        </span>
+      </div>`).join('');
+  }
+
+  // পুরানো দিনের ইতিহাস
+  const histEl = document.getElementById('dailyHistory');
+  if (!pastDates.length) { histEl.innerHTML='<div class="empty"><div class="em">📅</div>কোনো ইতিহাস নেই</div>'; }
+  else {
+    histEl.innerHTML = pastDates.slice(0,30).map(date=>{
+      const txs = state.dailyTx.filter(x=>x.date===date);
+      const inc = txs.filter(x=>x.kind==='income').reduce((s,x)=>s+x.amount,0);
+      const exp = txs.filter(x=>x.kind==='expense').reduce((s,x)=>s+x.amount,0);
+      const n = inc-exp;
+      return `
+        <div class="hist-item">
+          <div class="hd">📅 ${dateBN(date)}</div>
+          <div class="hg">
+            <div class="hb"><div class="hbl">আয়</div><div class="hbv" style="color:var(--green)">${fmt(inc)} ৳</div></div>
+            <div class="hb"><div class="hbl">ব্যয়</div><div class="hbv" style="color:var(--red)">${fmt(exp)} ৳</div></div>
+            <div class="hb"><div class="hbl">নিট</div><div class="hbv" style="color:${n>=0?'var(--green)':'var(--red)'}">${n>=0?'+':''}${fmt(n)} ৳</div></div>
+          </div>
+        </div>`;
+    }).join('');
+  }
+}
+
+// ══════════════════════════════════════════════════════════════════════ CATEGORY MANAGER
+function showCatManager(type) {
+  activeCatType = type;
+  document.getElementById('catManagerTitle').textContent = type==='income'?'আয়ের খাত পরিচালনা':'ব্যয়ের খাত পরিচালনা';
+  document.getElementById('catManagerPanel').style.display='block';
+  renderCatList();
+}
+function hideCatManager() { document.getElementById('catManagerPanel').style.display='none'; activeCatType=null; }
+function renderCatList() {
+  const cats = activeCatType==='income' ? state.incCats : state.expCats;
+  const el = document.getElementById('catList');
+  if (!cats.length) { el.innerHTML='<div style="color:var(--muted);font-size:12px;text-align:center;padding:10px">কোনো খাত নেই</div>'; return; }
+  el.innerHTML = cats.map((c,i)=>`
+    <div class="li" style="padding:9px 11px">
+      <div class="ll"><div class="ln" style="font-size:13px">${c}</div></div>
+      <button class="btn btn-danger btn-sm" onclick="deleteCat(${i})">✕ মুছুন</button>
+    </div>`).join('');
+}
+function addNewCat() {
+  const name = document.getElementById('newCatName').value.trim();
+  if (!name) { alert('খাতের নাম দিন'); return; }
+  const arr = activeCatType==='income' ? state.incCats : state.expCats;
+  if (arr.includes(name)) { alert('এই খাত আগেই আছে'); return; }
+  arr.push(name); save();
+  document.getElementById('newCatName').value='';
+  renderCatList(); populateCatSelects();
+}
+function deleteCat(idx) {
+  const arr = activeCatType==='income' ? state.incCats : state.expCats;
+  if (!confirm(`"${arr[idx]}" খাত মুছবেন?`)) return;
+  arr.splice(idx,1); save(); renderCatList(); populateCatSelects();
+}
+
+// ══════════════════════════════════════════════════════════════════════ PAIKER পাইকার
+function paikerBalance(pk) {
+  const opening = pk.opening || 0;
+  const totalBaki = (pk.txs||[]).filter(t=>t.type==='baki').reduce((s,t)=>s+t.amount,0);
+  const totalJoma = (pk.txs||[]).filter(t=>t.type==='joma').reduce((s,t)=>s+t.amount,0);
+  return opening + totalBaki - totalJoma;
+}
+
+function showAddPaiker() {
+  document.getElementById('paikerListView').style.display='none';
+  document.getElementById('addPaikerView').style.display='block';
+  document.getElementById('paikerDetail').style.display='none';
+}
+function hideAddPaiker() {
+  document.getElementById('paikerListView').style.display='block';
+  document.getElementById('addPaikerView').style.display='none';
+}
+
+function addPaiker() {
+  const name = document.getElementById('pkName').value.trim();
+  if (!name) { alert('নাম দিন'); return; }
+  const phone = document.getElementById('pkPhone').value.trim();
+  const area = document.getElementById('pkArea').value.trim();
+  const opening = parseFloat(document.getElementById('pkOpening').value)||0;
+  state.paikers.push({id:Date.now(),name,phone,area,opening,txs:[]});
+  save();
+  ['pkName','pkPhone','pkArea','pkOpening'].forEach(id=>document.getElementById(id).value='');
+  hideAddPaiker(); renderPaikerList(); renderDashboard();
+}
+
+function renderPaikerList() {
+  const search = (document.getElementById('paikerSearch')?.value||'').toLowerCase();
+  const el = document.getElementById('paikerList');
+  const todayStr = todayISO();
+
+  const totalDue = state.paikers.reduce((s,pk)=>s+paikerBalance(pk),0);
+  const todayCol = state.paikers.reduce((s,pk)=>{
+    return s + (pk.txs||[]).filter(t=>t.type==='joma'&&t.date===todayStr).reduce((a,t)=>a+t.amount,0);
+  },0);
+  document.getElementById('pkTotalDue').textContent = fmt(totalDue)+' ৳';
+  document.getElementById('pkTodayCollection').textContent = fmt(todayCol)+' ৳';
+
+  const filtered = state.paikers.filter(pk=>pk.name.toLowerCase().includes(search)||pk.area?.toLowerCase().includes(search)||pk.phone?.includes(search));
+  if (!filtered.length) { el.innerHTML='<div class="empty"><div class="em">🧾</div>কোনো পাইকার নেই</div>'; return; }
+
+  // sort by balance desc
+  const sorted = [...filtered].sort((a,b)=>paikerBalance(b)-paikerBalance(a));
+  el.innerHTML = sorted.map(pk=>{
+    const bal = paikerBalance(pk);
+    const todayColPk = (pk.txs||[]).filter(t=>t.type==='joma'&&t.date===todayStr).reduce((s,t)=>s+t.amount,0);
+    return `
+      <div class="li" onclick="openPaikerDetail(${pk.id})" style="cursor:pointer">
+        <div class="ll">
+          <div class="ln">${pk.name} ${pk.area?`<span class="tag blue" style="font-size:9px">${pk.area}</span>`:''}</div>
+          <div class="ls">${pk.phone?'📞 '+pk.phone+' · ':''}${(pk.txs||[]).length}টি লেনদেন${todayColPk?` · আজ জমা: ${fmt(todayColPk)} ৳`:''}</div>
+        </div>
+        <div style="text-align:right">
+          <div class="la ${bal>0?'red':bal<0?'green':''}"> ${fmt(bal)} ৳</div>
+          <div style="font-size:10px;color:var(--muted)">বিস্তারিত →</div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function openPaikerDetail(id) {
+  activePaikerId = id;
+  const pk = state.paikers.find(x=>x.id===id);
+  if (!pk) return;
+  document.getElementById('paikerListView').style.display='none';
+  document.getElementById('addPaikerView').style.display='none';
+  document.getElementById('paikerDetail').style.display='block';
+  document.getElementById('pkdBakiDate').value = todayISO();
+  document.getElementById('pkdJomaDate').value = todayISO();
+  document.getElementById('pkdName').textContent = pk.name;
+  document.getElementById('pkdSub').textContent = [pk.phone,pk.area].filter(Boolean).join(' · ');
+  renderPaikerDetail(pk);
+}
+
+function renderPaikerDetail(pk) {
+  const bal = paikerBalance(pk);
+  document.getElementById('pkdBalance').textContent = fmt(bal)+' ৳';
+  document.getElementById('pkdBalance').style.color = bal>0?'var(--red)':bal===0?'var(--muted)':'var(--green)';
+  const totalBaki = (pk.txs||[]).filter(t=>t.type==='baki').reduce((s,t)=>s+t.amount,0);
+  const totalJoma = (pk.txs||[]).filter(t=>t.type==='joma').reduce((s,t)=>s+t.amount,0);
+  document.getElementById('pkdBalSub').textContent = `শুরু জের: ${fmt(pk.opening||0)} ৳`;
+  document.getElementById('pkdTotalBaki').textContent = fmt(totalBaki)+' ৳';
+  document.getElementById('pkdTotalJoma').textContent = fmt(totalJoma)+' ৳';
+  document.getElementById('pkdNetDue').textContent = fmt(bal)+' ৳';
+  document.getElementById('pkdNetDue').style.color = bal>0?'var(--red)':'var(--green)';
+
+  // ফোন বাটন
+  const callBtn = document.getElementById('pkdCallBtn');
+  if (pk.phone) { callBtn.style.display='inline-flex'; callBtn.setAttribute('data-phone', pk.phone); }
+  else callBtn.style.display='none';
+
+  const txEl = document.getElementById('pkdTxList');
+  if (!pk.txs||!pk.txs.length) { txEl.innerHTML='<div style="color:var(--muted);font-size:12px;text-align:center;padding:14px">কোনো লেনদেন নেই</div>'; return; }
+
+  // তারিখ অনুযায়ী গ্রুপ করা, running balance সহ
+  let running = pk.opening||0;
+  const txsSorted = [...pk.txs].sort((a,b)=>a.date.localeCompare(b.date));
+  
+  // running balance calculate করা
+  const txsWithBal = txsSorted.map(tx => {
+    if (tx.type==='baki') running += tx.amount;
+    else running -= tx.amount;
+    return {...tx, runningBal: running};
+  });
+
+  // তারিখ অনুযায়ী গ্রুপ
+  const dateGroups = {};
+  txsWithBal.forEach(tx => {
+    if (!dateGroups[tx.date]) dateGroups[tx.date] = [];
+    dateGroups[tx.date].push(tx);
+  });
+
+  const sortedDates = Object.keys(dateGroups).sort().reverse();
+
+  txEl.innerHTML = sortedDates.map(date => {
+    const txs = dateGroups[date];
+    const dayBaki = txs.filter(t=>t.type==='baki').reduce((s,t)=>s+t.amount,0);
+    const dayJoma = txs.filter(t=>t.type==='joma').reduce((s,t)=>s+t.amount,0);
+    const lastBal = txs[txs.length-1].runningBal;
+    return `
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:11px;margin-bottom:8px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <div style="font-size:12px;font-weight:700;color:var(--accent2)">📅 ${dateBN(date)}</div>
+          <div style="font-size:11px;color:var(--muted)">জের: <span style="font-weight:700;color:${lastBal>0?'var(--red)':'var(--green)'}">${fmt(lastBal)} ৳</span></div>
+        </div>
+        ${dayBaki?`<div class="cfr"><span class="cfl">🐟 মাছ নিয়েছে</span><span class="cfv red">+${fmt(dayBaki)} ৳</span></div>`:''}
+        ${dayJoma?`<div class="cfr"><span class="cfl">💵 জমা দিয়েছে</span><span class="cfv green">-${fmt(dayJoma)} ৳</span></div>`:''}
+        ${txs.map(tx=>`
+          <div style="background:var(--bg);border-radius:6px;padding:7px 9px;margin-top:5px;display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <span class="tag ${tx.type==='joma'?'in':'out'}" style="font-size:10px">${tx.type==='joma'?'জমা':'বাকি'}</span>
+              ${tx.note?`<span style="font-size:11px;color:var(--muted);margin-left:5px">${tx.note}</span>`:''}
+            </div>
+            <div style="display:flex;align-items:center;gap:6px">
+              <span style="font-size:13px;font-weight:700;color:${tx.type==='joma'?'var(--green)':'var(--red)'}">
+                ${tx.type==='joma'?'-':'+'}${fmt(tx.amount)} ৳
+              </span>
+              <button class="btn btn-danger btn-sm" style="padding:3px 7px;font-size:10px" onclick="deletePaikerTx(${pk.id},${tx.id})">✕</button>
+            </div>
+          </div>`).join('')}
+      </div>`;
+  }).join('');
+}
+
+function addPaikerBaki() {
+  const pk = state.paikers.find(x=>x.id===activePaikerId);
+  if (!pk) return;
+  const amt = parseFloat(document.getElementById('pkdBakiAmt').value)||0;
+  const date = document.getElementById('pkdBakiDate').value||todayISO();
+  const note = document.getElementById('pkdBakiNote').value.trim();
+  if (!amt) { alert('পরিমাণ দিন'); return; }
+  pk.txs.push({id:Date.now(),type:'baki',amount:amt,date,note});
+  save();
+  document.getElementById('pkdBakiAmt').value='';
+  document.getElementById('pkdBakiNote').value='';
+  renderPaikerDetail(pk); renderPaikerList(); renderDashboard();
+}
+
+function addPaikerJoma() {
+  const pk = state.paikers.find(x=>x.id===activePaikerId);
+  if (!pk) return;
+  const amt = parseFloat(document.getElementById('pkdJomaAmt').value)||0;
+  const date = document.getElementById('pkdJomaDate').value||todayISO();
+  const note = document.getElementById('pkdJomaNote').value.trim();
+  if (!amt) { alert('পরিমাণ দিন'); return; }
+  const bal = paikerBalance(pk);
+  if (amt > bal && bal > 0) {
+    if (!confirm(`বর্তমান বাকি ${fmt(bal)} ৳, কিন্তু জমা ${fmt(amt)} ৳ দিচ্ছেন। নিশ্চিত?`)) return;
+  }
+  pk.txs.push({id:Date.now(),type:'joma',amount:amt,date,note});
+  state.cash += amt; // জমা নিলে ক্যাশ বাড়বে
+  save();
+  document.getElementById('pkdJomaAmt').value='';
+  document.getElementById('pkdJomaNote').value='';
+  renderPaikerDetail(pk); renderPaikerList(); updateHeader(); renderDashboard();
+}
+
+
+function callPaiker() {
+  const pk = state.paikers.find(x=>x.id===activePaikerId);
+  if (pk && pk.phone) window.location.href = 'tel:' + pk.phone;
+}
+
+function sharePaikerStatement() {
+  const pk = state.paikers.find(x=>x.id===activePaikerId);
+  if (!pk) return;
+  const bal = paikerBalance(pk);
+  const totalBaki = (pk.txs||[]).filter(t=>t.type==='baki').reduce((s,t)=>s+t.amount,0);
+  const totalJoma = (pk.txs||[]).filter(t=>t.type==='joma').reduce((s,t)=>s+t.amount,0);
+
+  const txsSorted = [...pk.txs].sort((a,b)=>a.date.localeCompare(b.date));
+  let running = pk.opening||0;
+  let txLines = '';
+  if (pk.opening) txLines += `শুরুর জের: ${fmt(pk.opening)} ৳\n`;
+  txLines += '━━━━━━━━━━━━━━━━\n';
+  txsSorted.forEach(tx => {
+    if (tx.type==='baki') { running+=tx.amount; txLines+=`${tx.date} | 🐟 বাকি: +${fmt(tx.amount)} ৳${tx.note?' ('+tx.note+')':''} | জের: ${fmt(running)} ৳\n`; }
+    else { running-=tx.amount; txLines+=`${tx.date} | 💵 জমা: -${fmt(tx.amount)} ৳${tx.note?' ('+tx.note+')':''} | জের: ${fmt(running)} ৳\n`; }
+  });
+
+  const text = `🐟 চাঁদপুর ফিশ — হিসাব স্টেটমেন্ট
+👤 ${pk.name}${pk.area?' ('+pk.area+')':''}
+📅 ${dateBN(todayISO())}
+━━━━━━━━━━━━━━━━
+${txLines}━━━━━━━━━━━━━━━━
+📦 মোট বাকি নেওয়া: ${fmt(totalBaki)} ৳
+💵 মোট জমা: ${fmt(totalJoma)} ৳
+━━━━━━━━━━━━━━━━
+${bal>0?'🔴 বকেয়া বাকি':'🟢 কোনো বাকি নেই'}: ${fmt(Math.abs(bal))} ৳`;
+
+  if (navigator.share) {
+    navigator.share({ title: pk.name+' স্টেটমেন্ট', text });
+  } else {
+    navigator.clipboard.writeText(text).then(()=>alert('✅ কপি হয়েছে! WhatsApp বা যেকোনো জায়গায় paste করুন'));
+  }
+}
+
+function deletePaikerTx(pkId, txId) {
+  const pk = state.paikers.find(x=>x.id===pkId);
+  if (!pk||!confirm('এই লেনদেন মুছবেন?')) return;
+  const tx = pk.txs.find(x=>x.id===txId);
+  if (!tx) return;
+  if (tx.type==='joma') state.cash -= tx.amount; // জমা মুছলে ক্যাশ কমবে
+  pk.txs = pk.txs.filter(x=>x.id!==txId);
+  save(); renderPaikerDetail(pk); renderPaikerList(); updateHeader(); renderDashboard();
+}
+
+function closePaikerDetail() {
+  activePaikerId = null;
+  document.getElementById('paikerDetail').style.display='none';
+  document.getElementById('paikerListView').style.display='block';
+  renderPaikerList();
+}
+
+// ══════════════════════════════════════════════════════════════════════ HAWALAT
+function addHawalat() {
+  const name = document.getElementById('hawName').value.trim();
+  const amount = parseFloat(document.getElementById('hawAmount').value)||0;
+  const type = document.getElementById('hawType').value;
+  const date = document.getElementById('hawDate').value || todayISO();
+  const note = document.getElementById('hawNote').value.trim();
+  if (!name||!amount) { alert('নাম ও পরিমাণ দিন'); return; }
+  state.hawList.push({id:Date.now(),name,amount,type,date,note,settled:false});
+  const isBikash = type.includes('বিকাশ');
+  if (type==='দিলাম'||type==='বিকাশ দিলাম') state.cash-=amount;
+  else state.cash+=amount;
+  save();
+  document.getElementById('hawName').value='';
+  document.getElementById('hawAmount').value='';
+  document.getElementById('hawNote').value='';
+  renderHawalat(); renderDashboard(); updateHeader();
+}
+function settleHaw(id) {
+  const h = state.hawList.find(x=>x.id===id);
+  if (!h) return;
+  h.settled=true;
+  if (h.type==='দিলাম') state.cash+=h.amount; else state.cash-=h.amount;
+  save(); renderHawalat(); renderDashboard(); updateHeader();
+}
+function renderHawalat() {
+  const el = document.getElementById('hawList');
+  const active = state.hawList.filter(h=>!h.settled);
+  const done = state.hawList.filter(h=>h.settled);
+  if (!state.hawList.length) { el.innerHTML='<div class="empty"><div class="em">🤝</div>কোনো হাওলাত নেই</div>'; }
+  else {
+    el.innerHTML = active.map(h=>`
+      <div class="li">
+        <div class="ll">
+          <div class="ln">${h.name} <span class="tag ${h.type==='দিলাম'?'out':'in'}">${h.type}</span></div>
+          <div class="ls">${dateBN(h.date)}${h.note?' · '+h.note:''} ${h.type.includes('বিকাশ')?'<span class="tag blue" style="font-size:9px">বিকাশ</span>':''}</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <div class="la ${h.type==='দিলাম'?'red':'green'}">${fmt(h.amount)} ৳</div>
+          <button class="btn btn-outline btn-sm" onclick="settleHaw(${h.id})">মিটিয়ে দিন</button>
+        </div>
+      </div>`).join('') + (done.length?`
+      <div class="section-hd" style="margin-top:8px">✅ মিটিয়ে দেওয়া হয়েছে</div>
+      ${done.map(h=>`<div class="li" style="opacity:0.5"><div class="ll"><div class="ln">${h.name}</div><div class="ls">${dateBN(h.date)}</div></div><div class="la ${h.type==='দিলাম'?'red':'green'}">${fmt(h.amount)} ৳</div></div>`).join('')}`:'');
+  }
+  const given = active.filter(h=>h.type==='দিলাম').reduce((s,h)=>s+h.amount,0);
+  const taken = active.filter(h=>h.type==='নিলাম').reduce((s,h)=>s+h.amount,0);
+  document.getElementById('hawGiven').textContent=fmt(given)+' ৳';
+  document.getElementById('hawTaken').textContent=fmt(taken)+' ৳';
+}
+
+// ══════════════════════════════════════════════════════════════════════ HISTORY
+function renderHistory() {
+  const el = document.getElementById('historyList');
+  if (!state.history.length) { el.innerHTML='<div class="empty"><div class="em">📋</div>কোনো ইতিহাস নেই</div>'; return; }
+  el.innerHTML = state.history.map(e=>`
+    <div class="hist-item">
+      <div class="hd">📅 ${e.dateDisplay}</div>
+      <div class="hg">
+        <div class="hb"><div class="hbl">চালান</div><div class="hbv">${fmt(e.totalChalan)} ৳</div></div>
+        <div class="hb"><div class="hbl">নিট লাভ</div><div class="hbv" style="color:${e.netProfit>=0?'var(--green)':'var(--red)'}">${fmt(e.netProfit)} ৳</div></div>
+        <div class="hb"><div class="hbl">ক্যাশ</div><div class="hbv" style="color:var(--accent)">${fmt(e.cashAfter)} ৳</div></div>
+      </div>
+    </div>`).join('');
+}
+
+// ══════════════════════════════════════════════════════════════════════ LEDGER
+function ledgerBalance(person) {
+  let bal = person.opening||0;
+  (person.transactions||[]).forEach(tx=>{
+    if (tx.type==='দিলাম') bal-=tx.amount;
+    else if (tx.type==='পেলাম') bal-=tx.amount;
+    else if (tx.type==='চালান') bal+=tx.amount;
+    else if (tx.type==='ধার দিলাম') bal-=tx.amount;
+    else if (tx.type==='ধার নিলাম') bal+=tx.amount;
+  });
+  return bal;
+}
+function addLedgerPerson() {
+  const name = document.getElementById('ledgerName').value.trim();
+  const type = document.getElementById('ledgerType').value;
+  const opening = parseFloat(document.getElementById('ledgerOpening').value)||0;
+  if (!name) { alert('নাম দিন'); return; }
+  state.ledger.push({id:Date.now(),name,type,opening,transactions:[]});
+  save();
+  document.getElementById('ledgerName').value='';
+  document.getElementById('ledgerOpening').value='';
+  renderLedgerList();
+}
+function renderLedgerList() {
+  const el = document.getElementById('ledgerPersonList');
+  if (!el) return;
+  if (!state.ledger.length) { el.innerHTML='<div class="empty"><div class="em">📒</div>কোনো লেজার নেই</div>'; return; }
+  const totalOwed = state.ledger.reduce((s,p)=>{const b=ledgerBalance(p);return s+(b>0?b:0);},0);
+  const totalReceivable = state.ledger.reduce((s,p)=>{const b=ledgerBalance(p);return s+(b<0?Math.abs(b):0);},0);
+  el.innerHTML = `
+    <div class="sum-grid" style="margin-bottom:12px">
+      <div class="sum-box red"><div class="lbl">আমি দেবো (মোট)</div><div class="val">${fmt(totalOwed)} ৳</div></div>
+      <div class="sum-box green"><div class="lbl">আমি পাবো (মোট)</div><div class="val">${fmt(totalReceivable)} ৳</div></div>
+    </div>
+    ${state.ledger.map(p=>{
+      const bal=ledgerBalance(p),isOwe=bal>0;
+      return `
+        <div class="li" onclick="openLedgerDetail(${p.id})" style="cursor:pointer">
+          <div class="ll">
+            <div class="ln">${p.name} <span class="tag ${isOwe?'out':'in'}" style="font-size:9px">${p.type}</span></div>
+            <div class="ls">${isOwe?'⬆️ আমি দেবো':'⬇️ আমি পাবো'} · ${p.transactions.length}টি লেনদেন</div>
+          </div>
+          <div>
+            <div class="la ${isOwe?'red':'green'}">${fmt(Math.abs(bal))} ৳</div>
+            <div style="font-size:10px;color:var(--muted);text-align:right">বিস্তারিত →</div>
+          </div>
+        </div>`;
+    }).join('')}`;
+}
+function openLedgerDetail(id) {
+  activeLedgerId=id;
+  const p=state.ledger.find(x=>x.id===id);
+  if (!p) return;
+  document.getElementById('ledgerPersonList').style.display='none';
+  document.querySelector('#page-ledger .card').style.display='none';
+  document.getElementById('ledgerDetail').style.display='block';
+  document.getElementById('ldName').textContent=p.name;
+  document.getElementById('ldTypeBadge').textContent=p.type;
+  renderLedgerDetail(p);
+}
+function renderLedgerDetail(p) {
+  const bal=ledgerBalance(p),isOwe=bal>0;
+  const txTotal=(p.transactions||[]).reduce((s,tx)=>s+tx.amount,0);
+  document.getElementById('ldOpening').textContent=fmt(p.opening)+' ৳';
+  document.getElementById('ldTotal').textContent=fmt(txTotal)+' ৳ ('+p.transactions.length+'টি)';
+  document.getElementById('ldBalance').textContent=fmt(Math.abs(bal))+' ৳';
+  document.getElementById('ldBalance').style.color=isOwe?'var(--red)':'var(--green)';
+  document.getElementById('ldBalanceNote').textContent=isOwe?'⬆️ তুমি দেবে':'⬇️ তুমি পাবে';
+  const txEl=document.getElementById('ldTxList');
+  if (!p.transactions.length) { txEl.innerHTML='<div style="text-align:center;color:var(--muted);font-size:12px;padding:14px">কোনো লেনদেন নেই</div>'; return; }
+  txEl.innerHTML=[...p.transactions].reverse().map(tx=>{
+    const sign=(tx.type==='দিলাম'||tx.type==='ধার দিলাম')?'-':'+';
+    return `
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px;margin-bottom:6px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div><span class="tag ${sign==='-'?'in':'out'}" style="font-size:10px">${tx.type}</span>
+          <span style="font-size:11px;color:var(--muted);margin-left:6px">${tx.date}</span></div>
+          <div style="font-size:14px;font-weight:700;color:${sign==='-'?'var(--green)':'var(--red)'}">${sign}${fmt(tx.amount)} ৳</div>
+        </div>
+        ${tx.note?`<div style="font-size:11px;color:var(--muted);margin-top:4px">📝 ${tx.note}</div>`:''}
+      </div>`;
+  }).join('');
+}
+function addLedgerTx() {
+  const p=state.ledger.find(x=>x.id===activeLedgerId);
+  if (!p) return;
+  const amt=parseFloat(document.getElementById('ldTxAmt').value)||0;
+  const type=document.getElementById('ldTxType').value;
+  const note=document.getElementById('ldTxNote').value.trim();
+  if (!amt) { alert('পরিমাণ দিন'); return; }
+  p.transactions.push({id:Date.now(),amount:amt,type,note,date:todayISO()});
+  if (type==='দিলাম') state.cash-=amt;
+  else if (type==='পেলাম') state.cash+=amt;
+  save();
+  document.getElementById('ldTxAmt').value='';
+  document.getElementById('ldTxNote').value='';
+  renderLedgerDetail(p); updateHeader(); renderDashboard();
+}
+function closeLedgerDetail() {
+  activeLedgerId=null;
+  document.getElementById('ledgerDetail').style.display='none';
+  document.getElementById('ledgerPersonList').style.display='block';
+  document.querySelector('#page-ledger .card').style.display='block';
+  renderLedgerList();
+}
+
+
+// ══════════════════════════════════════════════════════════════════════ REPORT
+
+function setRange(type) {
+  const now = new Date();
+  const to = todayISO();
+  let from = to;
+  if (type === 'week') {
+    const d = new Date(now); d.setDate(d.getDate() - 6);
+    from = d.toISOString().split('T')[0];
+  } else if (type === 'month') {
+    from = to.slice(0,7) + '-01';
+  } else if (type === 'last3') {
+    const d = new Date(now); d.setMonth(d.getMonth() - 3);
+    from = d.toISOString().split('T')[0];
+  } else if (type === 'all') {
+    from = '2020-01-01';
+  }
+  document.getElementById('rptFrom').value = from;
+  document.getElementById('rptTo').value = to;
+  renderReport();
+}
+
+function renderReport() {
+  const from = document.getElementById('rptFrom').value;
+  const to = document.getElementById('rptTo').value;
+  if (!from || !to) return;
+
+  const sumEl = document.getElementById('rptSummary');
+  const txEl = document.getElementById('rptTxList');
+
+  // Filter daily transactions
+  const dailyTx = (state.dailyTx||[]).filter(x => x.date >= from && x.date <= to);
+  const totalInc = dailyTx.filter(x=>x.kind==='income').reduce((s,x)=>s+x.amount,0);
+  const totalExp = dailyTx.filter(x=>x.kind==='expense').reduce((s,x)=>s+x.amount,0);
+  const net = totalInc - totalExp;
+
+  // Filter chalans
+  const chalans = (state.history||[]).filter(x => x.date >= from && x.date <= to);
+  const totalChalan = chalans.reduce((s,x)=>s+x.totalChalan,0);
+  const totalComm = chalans.reduce((s,x)=>s+x.totalComm,0);
+
+  // Filter paiker collections
+  const pkCollections = (state.paikers||[]).reduce((s,pk) => {
+    return s + (pk.txs||[]).filter(t=>t.type==='joma'&&t.date>=from&&t.date<=to).reduce((a,t)=>a+t.amount,0);
+  },0);
+
+  // Filter hawalat
+  const haws = (state.hawList||[]).filter(x => x.date >= from && x.date <= to && !x.settled);
+  const hawGiven = haws.filter(x=>x.type==='দিলাম'||x.type==='বিকাশ দিলাম').reduce((s,x)=>s+x.amount,0);
+  const hawTaken = haws.filter(x=>x.type==='নিলাম'||x.type==='বিকাশ নিলাম').reduce((s,x)=>s+x.amount,0);
+
+  // Category breakdown
+  const catMap = {};
+  dailyTx.forEach(tx => {
+    if (!catMap[tx.cat]) catMap[tx.cat] = {inc:0, exp:0};
+    if (tx.kind==='income') catMap[tx.cat].inc += tx.amount;
+    else catMap[tx.cat].exp += tx.amount;
+  });
+
+  const fromBN = dateBN(from), toBN = dateBN(to);
+
+  sumEl.innerHTML = `
+    <div id="reportPrintArea">
+    <div class="card" style="border-color:var(--accent)">
+      <div class="card-title"><span>📊</span> ${fromBN} — ${toBN}</div>
+      <div class="cfr"><span class="cfl">📦 মোট চালান</span><span class="cfv">${fmt(totalChalan)} ৳</span></div>
+      <div class="cfr"><span class="cfl">💰 কমিশন আয়</span><span class="cfv green">+${fmt(totalComm)} ৳</span></div>
+      <div class="cfr"><span class="cfl">🧾 পাইকার কালেকশন</span><span class="cfv green">+${fmt(pkCollections)} ৳</span></div>
+      <div class="cfr"><span class="cfl">📈 অন্যান্য আয়</span><span class="cfv green">+${fmt(totalInc)} ৳</span></div>
+      <div class="cfr"><span class="cfl">📉 মোট ব্যয়</span><span class="cfv red">-${fmt(totalExp)} ৳</span></div>
+      <hr class="divider">
+      <div class="cfr total"><span class="cfl">নিট লাভ/লোকসান</span><span class="cfv ${net>=0?'green':'red'}" style="font-size:18px">${net>=0?'+':''}${fmt(net)} ৳</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>📂</span> খাতভিত্তিক বিশ্লেষণ</div>
+      ${Object.keys(catMap).length === 0 ? '<div style="color:var(--muted);font-size:12px;text-align:center;padding:10px">ডেটা নেই</div>' :
+        Object.entries(catMap).map(([cat,v]) => `
+        <div class="cfr">
+          <span class="cfl">${cat}</span>
+          <span style="display:flex;gap:10px;font-size:12px;font-weight:600">
+            ${v.inc?`<span style="color:var(--green)">+${fmt(v.inc)}</span>`:''}
+            ${v.exp?`<span style="color:var(--red)">-${fmt(v.exp)}</span>`:''}
+          </span>
+        </div>`).join('')
+      }
+    </div>
+
+    ${chalans.length ? `
+    <div class="card">
+      <div class="card-title"><span>📦</span> চালানের বিবরণ (${chalans.length}টি)</div>
+      ${chalans.map(c => `
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px;margin-bottom:6px">
+          <div style="display:flex;justify-content:space-between">
+            <div style="font-size:12px;color:var(--muted)">${c.dateDisplay}</div>
+            <div style="font-size:13px;font-weight:700;color:var(--accent)">${fmt(c.totalComm)} ৳ কমিশন</div>
+          </div>
+          <div style="font-size:11px;color:var(--muted);margin-top:3px">চালান: ${fmt(c.totalChalan)} ৳ · পার্টি দেওয়া: ${fmt(c.totalPaidToParty)} ৳ · নগদ: ${fmt(c.cashIn)} ৳</div>
+        </div>`).join('')}
+    </div>` : ''}
+
+    ${haws.length ? `
+    <div class="card">
+      <div class="card-title"><span>🤝</span> হাওলাত (${haws.length}টি)</div>
+      ${haws.map(h => `
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px;margin-bottom:6px">
+          <div style="display:flex;justify-content:space-between">
+            <div>
+              <span style="font-size:13px;font-weight:600">${h.name}</span>
+              ${h.type.includes('বিকাশ')?'<span class="tag blue" style="font-size:9px;margin-left:5px">বিকাশ</span>':''}
+            </div>
+            <div style="font-size:13px;font-weight:700;color:${h.type.includes('দিলাম')?'var(--red)':'var(--green)'}">
+              ${h.type.includes('দিলাম')?'-':'+'}${fmt(h.amount)} ৳
+            </div>
+          </div>
+          <div style="font-size:11px;color:var(--muted);margin-top:3px">${dateBN(h.date)}${h.note?' · '+h.note:''}</div>
+        </div>`).join('')}
+    </div>` : ''}
+    </div>`;
+
+  // বিস্তারিত লেনদেন (তারিখ অনুযায়ী)
+  const allDates = [...new Set([
+    ...dailyTx.map(x=>x.date),
+    ...chalans.map(x=>x.date)
+  ])].sort().reverse();
+
+  if (!allDates.length) {
+    txEl.innerHTML = '<div class="empty"><div class="em">📅</div>এই সময়ে কোনো লেনদেন নেই</div>';
+  } else {
+    txEl.innerHTML = allDates.map(date => {
+      const dayTx = dailyTx.filter(x=>x.date===date);
+      const dayChalan = chalans.filter(x=>x.date===date);
+      const dayInc = dayTx.filter(x=>x.kind==='income').reduce((s,x)=>s+x.amount,0);
+      const dayExp = dayTx.filter(x=>x.kind==='expense').reduce((s,x)=>s+x.amount,0);
+      const dayComm = dayChalan.reduce((s,x)=>s+x.totalComm,0);
+      const dayNet = dayInc + dayComm - dayExp;
+      return `
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:8px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <div style="font-size:12px;font-weight:700;color:var(--accent2)">📅 ${dateBN(date)}</div>
+            <div style="font-size:13px;font-weight:700;color:${dayNet>=0?'var(--green)':'var(--red)'}">
+              ${dayNet>=0?'+':''}${fmt(dayNet)} ৳
+            </div>
+          </div>
+          ${dayChalan.map(c=>`<div class="cfr"><span class="cfl">📦 চালান কমিশন</span><span class="cfv green">+${fmt(c.totalComm)} ৳</span></div>`).join('')}
+          ${dayTx.filter(x=>x.kind==='income').map(tx=>`<div class="cfr"><span class="cfl">📈 ${tx.name} <span class="tag in" style="font-size:9px">${tx.cat}</span></span><span class="cfv green">+${fmt(tx.amount)} ৳</span></div>`).join('')}
+          ${dayTx.filter(x=>x.kind==='expense').map(tx=>`<div class="cfr"><span class="cfl">📉 ${tx.name} <span class="tag out" style="font-size:9px">${tx.cat}</span></span><span class="cfv red">-${fmt(tx.amount)} ৳</span></div>`).join('')}
+        </div>`;
+    }).join('');
+  }
+}
+
+function shareReport() {
+  const from = document.getElementById('rptFrom').value;
+  const to = document.getElementById('rptTo').value;
+  if (!from||!to) { alert('আগে তারিখ সিলেক্ট করুন'); return; }
+
+  const dailyTx = (state.dailyTx||[]).filter(x => x.date >= from && x.date <= to);
+  const totalInc = dailyTx.filter(x=>x.kind==='income').reduce((s,x)=>s+x.amount,0);
+  const totalExp = dailyTx.filter(x=>x.kind==='expense').reduce((s,x)=>s+x.amount,0);
+  const chalans = (state.history||[]).filter(x => x.date >= from && x.date <= to);
+  const totalComm = chalans.reduce((s,x)=>s+x.totalComm,0);
+  const net = totalInc + totalComm - totalExp;
+
+  const text = `🐟 চাঁদপুর ফিশ — হিসাব রিপোর্ট
+📅 ${dateBN(from)} থেকে ${dateBN(to)}
+━━━━━━━━━━━━━━━━
+💰 কমিশন আয়: ${fmt(totalComm)} ৳
+📈 অন্যান্য আয়: ${fmt(totalInc)} ৳
+📉 মোট ব্যয়: ${fmt(totalExp)} ৳
+━━━━━━━━━━━━━━━━
+${net>=0?'✅ নিট লাভ':'❌ নিট লোকসান'}: ${fmt(Math.abs(net))} ৳
+━━━━━━━━━━━━━━━━
+📊 চাঁদপুর ফিশ অ্যাপ থেকে`;
+
+  if (navigator.share) {
+    navigator.share({ title: 'চাঁদপুর ফিশ রিপোর্ট', text });
+  } else {
+    navigator.clipboard.writeText(text).then(() => alert('✅ কপি হয়েছে! যেকোনো জায়গায় paste করুন'));
+  }
+}
+
+function printReport() {
+  const area = document.getElementById('reportPrintArea');
+  if (!area) { alert('আগে তারিখ সিলেক্ট করুন'); return; }
+  const win = window.open('', '_blank');
+  win.document.write(`<html><head><meta charset="UTF-8">
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body{font-family:'Hind Siliguri',sans-serif;padding:20px;color:#111;background:#fff;}
+    h2{color:#0a1628;text-align:center;margin-bottom:16px;}
+    .cfr{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #eee;font-size:14px;}
+    .card{border:1px solid #ddd;border-radius:8px;padding:14px;margin-bottom:12px;}
+    .card-title{font-size:12px;font-weight:700;color:#666;margin-bottom:10px;}
+    .green{color:#00a87e;} .red{color:#e03;}
+    @media print{button{display:none}}
+  </style></head><body>
+  <h2>🐟 চাঁদপুর ফিশ — হিসাব রিপোর্ট</h2>
+  ${area.innerHTML}
+  <div style="text-align:center;margin-top:20px;font-size:11px;color:#999">চাঁদপুর ফিশ অ্যাপ</div>
+  <script>window.onload=function(){window.print();}<\/script>
+  </body></html>`);
+  win.document.close();
+}
+
+function saveReportImage() {
+  shareReport();
+}
+
+
+// ══════════════════════════════════════════════════════════════════════ BACKUP
+function exportBackup() {
+  const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='mach_backup_'+todayISO()+'.json';
+  a.click();
+}
+function restoreBackup(e) {
+  const file=e.target.files[0];
+  if (!file) return;
+  const r=new FileReader();
+  r.onload=function(){
+    try {
+      const data=JSON.parse(r.result);
+      localStorage.setItem('mach_state',JSON.stringify(data));
+      alert('✅ Backup Restore সম্পন্ন। অ্যাপ রিফ্রেশ করুন।');
+      location.reload();
+    } catch(err) { alert('❌ ফাইল সঠিক নয়।'); }
+  };
+  r.readAsText(file);
+}
+</script>
+</body>
+</html>
